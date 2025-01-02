@@ -23,12 +23,12 @@ public class OrderService {
         order.setUpdatedAt(LocalDateTime.now());
         Order savedOrder = orderRepository.save(order);
 
-        // Publish order created event to RabbitMQ
-        rabbitTemplate.convertAndSend("order-status-queue", "Order Created: " + order.getOrderId());
+
+      // rabbitTemplate.convertAndSend("order-status-queue", "Order Created: " + order.getOrderId());
         return savedOrder;
     }
 
-    // Update order status
+
     public Order updateOrderStatus(String orderId, String status) {
         Optional<Order> orderOptional = orderRepository.findById(orderId);
         if (orderOptional.isPresent()) {
@@ -38,7 +38,7 @@ public class OrderService {
             Order updatedOrder = orderRepository.save(order);
 
             // Publish order status updated event to RabbitMQ
-            rabbitTemplate.convertAndSend("order-status-queue", "Order Updated: " + order.getOrderId() + " - " + status);
+            //rabbitTemplate.convertAndSend("order-status-queue", "Order Updated: " + order.getOrderId() + " - " + status);
             return updatedOrder;
         }
         throw new RuntimeException("Order not found");
