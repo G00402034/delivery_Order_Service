@@ -37,7 +37,7 @@ public class OrderService {
             order.setUpdatedAt(LocalDateTime.now());
             Order updatedOrder = orderRepository.save(order);
 
-            // Publish order status updated event to RabbitMQ
+
             //rabbitTemplate.convertAndSend("order-status-queue", "Order Updated: " + order.getOrderId() + " - " + status);
             return updatedOrder;
         }
