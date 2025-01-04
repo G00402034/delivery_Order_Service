@@ -17,17 +17,13 @@ class OrderServiceIntegrationTest {
 
     @Test
     void testCreateOrder() {
-        // Arrange
+
         Order order = new Order();
         order.setCustomerId("customer123");
         order.setRestaurantId("restaurant456");
         order.setTotalAmount(25.50);
         order.setDeliveryAddress("123 Main St");
-
-        // Act
         ResponseEntity<Order> response = restTemplate.postForEntity("/api/orders", order, Order.class);
-
-        // Assert
         assertEquals(201, response.getStatusCodeValue());
         assertNotNull(response.getBody());
         assertEquals("customer123", response.getBody().getCustomerId());

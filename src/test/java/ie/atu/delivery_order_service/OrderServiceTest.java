@@ -30,10 +30,10 @@ class OrderServiceTest {
 
     @BeforeEach
     void setUp() {
-        // Initialize Mockito
+
         MockitoAnnotations.openMocks(this);
 
-        // Initialize a sample order
+
         sampleOrder = new Order();
         sampleOrder.setOrderId("1");
         sampleOrder.setCustomerId("customer123");
@@ -48,13 +48,9 @@ class OrderServiceTest {
 
     @Test
     void testCreateOrder() {
-        // Mock the repository to return the sample order when save is called
+
         when(orderRepository.save(sampleOrder)).thenReturn(sampleOrder);
-
-        // Call the service method
         Order createdOrder = orderService.createOrder(sampleOrder);
-
-        // Assertions
         assertNotNull(createdOrder, "The created order should not be null");
         assertEquals(sampleOrder.getCustomerId(), createdOrder.getCustomerId());
         verify(orderRepository, times(1)).save(sampleOrder);
@@ -64,13 +60,13 @@ class OrderServiceTest {
     void testGetOrderById() {
         String orderId = "1";
 
-        // Mock repository behavior
+
         when(orderRepository.findById(orderId)).thenReturn(Optional.of(sampleOrder));
 
-        // Call service method
+
         Order fetchedOrder = orderService.getOrderById(orderId);
 
-        // Assertions
+
         assertNotNull(fetchedOrder, "The fetched order should not be null");
         assertEquals(orderId, fetchedOrder.getOrderId());
         verify(orderRepository, times(1)).findById(orderId);
@@ -82,20 +78,20 @@ class OrderServiceTest {
         String orderId = "1";
         String newStatus = "Shipped";
 
-        // Mock behavior for finding and saving the order
+
         when(orderRepository.findById(orderId)).thenReturn(Optional.of(sampleOrder));
         when(orderRepository.save(any(Order.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
-        // Call the service method
+
         Order updatedOrder = orderService.updateOrderStatus(orderId, newStatus);
 
-        // Verify the order status is updated
+
         assertNotNull(updatedOrder);
         assertEquals(newStatus, updatedOrder.getStatus());
         verify(orderRepository, times(1)).findById(orderId);
         verify(orderRepository, times(1)).save(sampleOrder);
 
-        // Uncomment if RabbitMQ is used:
+
         // verify(rabbitTemplate, times(1)).convertAndSend("order-status-queue", "Order Updated: " + orderId + " - " + newStatus);
     }
 
